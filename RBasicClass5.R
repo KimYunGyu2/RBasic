@@ -74,3 +74,73 @@ gr_cyl <- group_by(mtcars, cyl)
 summarise(gr_cyl, n())
 
 # cyl 열을 그룹으로 개수는 총 3가지 4,6,8 이며 이에 따른 갯수는 11,7,14 인것을 볼수있다.
+
+# 파이프 연산자 %>% pipe operator ctrl + shift + m
+
+# 이름 그대로 연결하여 연산
+
+# 파이프 연산자를 사용하여 함수를 연달아 사용할 때 함수의 결과 값을 변수로 저장하지 않아도
+# 계속 결과값을 전달하여 사용할수 있다. 따라서 전체 코드가 간결해져 가독성이 높아진다.
+
+gr_cyl <- group_by(mtcars, cyl)
+summarise(gr_cyl, n())
+
+group_by(mtcars, cyl) %>% summarise(n())
+
+# 파이프 연산자는 %>% 를 기준으로 앞에 있는 함수의 결과값을 먼저 구한후에
+# 뒤에 있는 함수에 반영된다.
+
+mp_rank <- mutate(mtcars, mpg_rank = rank(mpg))
+arrange(mp_rank, mpg_rank)
+
+mutate(mtcars, mpg_rank = rank(mpg)) %>% arrange(mpg_rank)
+
+# 데이터 가공(데이터 전처리 데이터 핸들링 데이터 마트)
+# 데이터 분석을 위해 데이터를 준비하는 과정은 실제 분석보다 어렵고 시간도 많이 소모된다.
+
+library(readxl)
+exdata1 <- read_excel("Sample1.xlsx")
+
+str(exdata1)
+dim(exdata1)
+View(exdata1)
+
+# 성별 나이 지역에 따른 20년 21년 이용금액 이용건수
+
+# 원하는 변수만 추출하자
+# ID변수만 추출(파이프 연산자를 사용하여)
+
+exdata1 %>% select(ID)
+
+# ID AREA Y21_CNT 만 추출 (파이프 연산자를 사용하여)
+
+exdata1 %>% select(ID, AREA, Y21_CNT)
+
+# 특정 열을 제외하고 추출
+
+exdata1 %>% select(-AREA)
+
+exdata1 %>% select(-AREA, -Y21_CNT)
+
+# filter() - 행으로 추출
+
+exdata1 %>% filter(AREA == '서울')
+
+exdata1 %>% filter(AREA == '서울' & Y21_CNT >= 10)
+
+
+# 나이를 오름차순 정렬
+
+exdata1 %>% arrange(AGE)  # 기본은 오름차순
+
+# 나이를 내림차순 정렬
+
+exdata1 %>% arrange(desc(AGE))
+
+# 중첩 정렬
+
+# AGE 오름차순  Y21_AMT 는 내림차순
+
+exdata1 %>% arrange(AGE, desc(Y21_AMT))
+
+summarise()     group_by()
